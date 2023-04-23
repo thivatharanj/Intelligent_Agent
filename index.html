@@ -1,9 +1,13 @@
 <!DOCTYPE html>
-<html>
+<html style="background-image: url('Books.jpg');
+                background-repeat: no-repeat;
+                background-attachment: fixed;
+                background-size: 100% 100%;">
 <head>
     <meta charset="utf-8">
     <title>CS5368</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="style.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
     <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 
@@ -20,37 +24,66 @@
             margin: 4px 2px;
             cursor: pointer;
             border-radius: 50%;
+            float: right;
         }
 
         #answer-box {
             border: 1px solid black;
             padding: 10px;
             margin-top: 10px;
-            width: 800px;
+            height: 120px;
+            width: 500px;
+        }
+
+        #answer-box2 {
+            border: 1px solid black;
+            padding: 10px;
+            margin-top: 10px;
+            width: 500px;
         }
 
         .speech {
             border: 1px solid #ddd;
-            width: 300px;
+            width: 510px;
             padding: 0;
             margin: 0;
+            display: inline-block;
         }
 
         .speech input {
             border: 0;
-            width: 240px;
+            width: 500px;
             display: inline-block;
-            height: 30px;
+            height: 60px;
+            float: right;
         }
 
         .speech img {
             float: right;
-            width: 40px;
+            width: 20px;
         }
+
+        .center {
+          margin: auto;
+          width: 520px;
+          border: 3px solid green;
+          padding: 10px;
+            background-color: #dddddd;
+        }
+        .h1 {
+            text-align:center;
+        }
+        .submit1{
+            float: right;
+            padding: 5px;
+        }
+
+
     </style>
 </head>
 <body>
-<h1>AI Library Chatbot</h1>
+<div class="center">
+<h1 class="h1">AI Library Chatbot</h1>
 <!--    <div id="answer"></div>-->
 <!--&lt;!&ndash;    <button id="voice-input-btn"><i class="fa fa-microphone"></i></button>&ndash;&gt;-->
 <!--    <input type="text" x-webkit-speech placeholder="Type your question...">-->
@@ -59,21 +92,38 @@
 <!--    <div id="answer-box"></div>-->
 
 <!-- Search Form -->
-<div class="speech">
-    <input type="text" name="q" id="transcript" placeholder="Type your question..."/>
+<div class="speech" >
     <button id="voice-input-btn" onclick="startDictation()"><i class="fa fa-microphone"></i></button>
-    <button id="submit-btn">Submit</button>
+    <input type="text" name="q" id="transcript" placeholder="Type your question..."/>
+    <div> <button id="submit-btn" class="submit1">Submit</button> </div>
     <!--    <img onclick="startDictation()" src="//i.imgur.com/cHidSVu.gif" />-->
 </div>
-<div id="answer-box"></div>
-<div id="answer-box2"></div>
+<div id="answer-box" ></div>
+
+<div id="answer-box2">
+    <p>Sample questions</p>
+    <p>What are the library's opening hours?</p>
+<!--     <p>What are the library's opening hours during the weekends?</p>
+    <p>What are the library's opening hours during the weekdays?</p> -->
+    <p></p>
+    <p>Is eBook available at your library portal?</p>
+    <p>What type of information can I find in the library?</p>
+    <p>How many books can I check out at once?</p>
+    <p>How long can I borrow book for?</p>
+    <p>What is the library's policy on lost books?</p>
+    <p>How do I check out/return a book?</p>
+    <p>Can you recommend any crime novel books?</p>
+    <p>&nbsp;&nbsp;&nbsp;[Drama, Crime, Fantasy, Scientific, Fiction, Story]</p>
+
+</div>
+</div>
 <!-- HTML5 Speech Recognition API -->
 <script>
     function startDictation() {
         if (window.hasOwnProperty('webkitSpeechRecognition')) {
             var recognition = new webkitSpeechRecognition();
 
-            recognition.continuous = false;
+            recognition.continuous = true;
             recognition.interimResults = false;
 
             recognition.lang = 'en-US';
@@ -98,7 +148,7 @@
             console.log(question);
 
             $.ajax({
-                url: "http://127.0.0.1:5001/query_sparc",
+                url: "https://flask-cs-agent.onrender.com/query_sparc",
                 type: "POST",
                 headers: {
                     "X-Requested-With": "XMLHttpRequest"
@@ -124,11 +174,12 @@
                 event.preventDefault();
                 var text_val = $('#transcript').val();
                 $.ajax({
-                url: "http://127.0.0.1:5001/query_sparc",
+
+                    url: "https://flask-cs-agent.onrender.com/query_sparc",
                 type: "POST",
                 headers: {
                     "Access-Control-Allow-Headers": "*",
-                    "Access-Control-Allow-Origin": "http://127.0.0.1:5001/query_sparc"
+                    "Access-Control-Allow-Origin": "https://flask-cs-agent.onrender.com/query_sparc"
 
                 },
                 data: {
