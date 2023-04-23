@@ -2,6 +2,7 @@ import requests
 
 
 def get_sparc_result(query):
+    # this method used to connect with sparc
     headers = {'User-Agent': 'Mozilla/5.0'}
     url = 'http://wave.ttu.edu/ajax.php'
     payload = {"action": 'getQuery', "query": query,
