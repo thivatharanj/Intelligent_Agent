@@ -26,6 +26,7 @@ def post_query_records():
     try:
         query = get_sparc_query(input_string)
         result = get_sparc_result(query)
+        result = result.replace(",_", "__")
         result = result.replace("_", " ")
         response = jsonify({'result': result})
         response.headers.add('Access-Control-Allow-Origin', '*')
@@ -35,13 +36,11 @@ def post_query_records():
 
 
 def get_sparc_query(input_string):
-    # Todo need to implement som AI work to map query and input string
 
-    if 'borrow' in input_string and 'book' in input_string:
-        book_type = 'General books'
-        return f"borrowing_period('{book_type}', B) :- book('book1', '{book_type}'). #maximize {{ B }}. #show B : borrowing_period('{book_type}', B), book('book1', '{book_type}')."
-    elif 'lost' in input_string and 'book' in input_string:
-        # return "lost_book_policy(P) :- #show P : lost_book_policy(P)."
+    categories = ['drama', 'crime', 'fantasy', 'scientific', 'fiction', 'story']
+    input_string = input_string.lower()
+
+    if 'lost' in input_string and 'book' in input_string:
         return "lost_book_policy(P)"
     elif 'opening' in input_string and 'hours' in input_string and 'weekdays' in input_string:
         return "opening_hours(weekdays,X)"
@@ -49,9 +48,24 @@ def get_sparc_query(input_string):
         return "opening_hours(weekends,X)"
     elif 'opening' in input_string and 'hours' in input_string:
         return "opening_hours(Y,X)"
+    elif 'ebook' in input_string and 'available' in input_string:
+        return "ebook_available(X)"
+    elif 'type' in input_string and 'information' in input_string:
+        return "information_type(X)"
+    elif 'how many' in input_string and 'check out' in input_string:
+        return "max_books(X)"
+    elif 'how long' in input_string and 'borrow' in input_string:
+        return "borrowing_period(X, Y)"
+    elif 'return' in input_string and 'check' in input_string:
+        return "return_policy(X)"
+    elif 'recommend' in input_string or any(word in input_string for word in categories):
+        for word in categories:
+            if word in input_string:
+                return "category({0},X)".format(word)
+        return "category(Y,X)"
+
     else:
         return None
-
 
 # if __name__ == '__main__':
 #     app.run(host='0.0.0.0', port=5001)
